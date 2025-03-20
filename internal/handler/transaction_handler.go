@@ -31,6 +31,19 @@ func NewTransactionHandler(db *gorm.DB) *TransactionHandler {
 	}
 }
 
+// CreateTransaction godoc
+// @Summary Create a transaction
+// @Description Create a new transaction and deduct user limit
+// @Tags transactions
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param tenor query int true "Tenor"
+// @Param request body dto.CreateTransactionRequest true "Transaction Request Body"
+// @Success 200 {object} helper.APIResponse
+// @Failure 400 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /api/transactions [post]
 func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 	var req dto.CreateTransactionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -64,6 +77,14 @@ func (h *TransactionHandler) CreateTransaction(c *gin.Context) {
 	helper.Success(c, "User created successfully", transaction)
 }
 
+// GetTransactions godoc
+// @Summary Get all transactions
+// @Tags transactions
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /api/transactions [get]
 func (h *TransactionHandler) GetTransactions(c *gin.Context) {
 	transactions, err := h.TransactionService.GetTransactions()
 	if err != nil {

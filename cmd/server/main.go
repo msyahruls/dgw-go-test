@@ -9,6 +9,8 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/msyahruls/kreditplus-go-test/docs"
 )
 
 func main() {
