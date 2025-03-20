@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
+    depends_on:
+      - db
+    command: >
+      /bin/sh -c "
+        apk add --no-cache netcat-openbsd &&
+        while ! nc -z db 5432; do sleep 1; done;
+        ./main
+      "
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kreditplus
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d
