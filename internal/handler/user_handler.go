@@ -22,6 +22,17 @@ func NewUserHandler(db *gorm.DB) *UserHandler {
 	}
 }
 
+// CreateUser godoc
+// @Summary Create a new user
+// @Description Create a new user with input data
+// @Tags users
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body dto.CreateUserRequest true "User Request Body"
+// @Success 200 {object} helper.APIResponse
+// @Failure 400 {object} helper.APIResponse
+// @Router /api/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req dto.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -34,7 +45,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		FullName:    req.FullName,
 		LegalName:   req.LegalName,
 		BirthPlace:  req.BirthPlace,
-		BirthDate:   parseDate(req.BirthDate), // helper func (parse time.Time)
+		BirthDate:   helper.ParseDate(req.BirthDate), // helper func (parse time.Time)
 		Salary:      req.Salary,
 		PhotoIDCard: req.PhotoIDCard,
 		PhotoSelfie: req.PhotoSelfie,
@@ -48,6 +59,14 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	helper.Success(c, "User created successfully", user)
 }
 
+// GetUsers godoc
+// @Summary Get list of users
+// @Tags users
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /api/users [get]
 func (h *UserHandler) GetUsers(c *gin.Context) {
 	users, err := h.UserService.GetUsers()
 	if err != nil {

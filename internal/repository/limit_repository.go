@@ -9,6 +9,7 @@ import (
 
 type LimitRepository interface {
 	CreateOrUpdate(limit *domain.Limit) error
+	FindAllLimit() ([]domain.Limit, error)
 	GetLimitsByUserID(userID uint) ([]domain.Limit, error)
 	GetLimitForUpdate(tx *gorm.DB, userID uint, tenor int) (*domain.Limit, error)
 	UpdateLimit(tx *gorm.DB, limit *domain.Limit) error
@@ -38,6 +39,12 @@ func (r *limitRepository) CreateOrUpdate(limit *domain.Limit) error {
 
 	// Create new limit
 	return r.db.Create(limit).Error
+}
+
+func (r *limitRepository) FindAllLimit() ([]domain.Limit, error) {
+	var limits []domain.Limit
+	err := r.db.Find(&limits).Error
+	return limits, err
 }
 
 func (r *limitRepository) GetLimitsByUserID(userID uint) ([]domain.Limit, error) {

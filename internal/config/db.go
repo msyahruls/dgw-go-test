@@ -24,7 +24,7 @@ func ConnectDB() *gorm.DB {
 	}
 
 	// Run Auto Migration
-	err = db.AutoMigrate(&domain.User{}, &domain.Limit{}, &domain.Transaction{})
+	err = db.AutoMigrate(&domain.User{}, &domain.Limit{}, &domain.Transaction{}, &domain.PaymentSchedule{})
 	if err != nil {
 		log.Fatal("Migration failed: ", err)
 	}

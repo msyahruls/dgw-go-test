@@ -16,6 +16,11 @@ func (m *LimitRepository) CreateOrUpdate(limit *domain.Limit) error {
 	return args.Error(0)
 }
 
+func (m *LimitRepository) FindAllLimit() ([]domain.Limit, error) {
+	args := m.Called()
+	return args.Get(0).([]domain.Limit), args.Error(1)
+}
+
 func (m *LimitRepository) GetLimitsByUserID(userID uint) ([]domain.Limit, error) {
 	args := m.Called(userID)
 	return args.Get(0).([]domain.Limit), args.Error(1)

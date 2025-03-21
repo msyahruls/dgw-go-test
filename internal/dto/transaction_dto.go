@@ -9,3 +9,8 @@ type CreateTransactionRequest struct {
 	InterestAmount    float64 `json:"interest_amount" binding:"required"`
 	AssetName         string  `json:"asset_name" binding:"required"`
 }
+
+type PaymentRequest struct {
+	ScheduleID  uint   `json:"schedule_id" binding:"required"`
+	PaymentDate string `json:"payment_date" binding:"required"`
+}

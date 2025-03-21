@@ -1,4 +1,273 @@
+definitions:
+  dto.CreateLimitRequest:
+    properties:
+      limit_amount:
+        type: number
+      tenor_months:
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - limit_amount
+    - tenor_months
+    - user_id
+    type: object
+  dto.CreateTransactionRequest:
+    properties:
+      admin_fee:
+        type: number
+      asset_name:
+        type: string
+      contract_number:
+        type: string
+      installment_amount:
+        type: number
+      interest_amount:
+        type: number
+      otr:
+        type: number
+      user_id:
+        type: integer
+    required:
+    - admin_fee
+    - asset_name
+    - contract_number
+    - installment_amount
+    - interest_amount
+    - otr
+    - user_id
+    type: object
+  dto.CreateUserRequest:
+    properties:
+      birth_date:
+        description: Date format
+        type: string
+      birth_place:
+        type: string
+      full_name:
+        type: string
+      legal_name:
+        type: string
+      nik:
+        type: string
+      photo_id_card:
+        type: string
+      photo_selfie:
+        type: string
+      salary:
+        type: number
+    required:
+    - birth_date
+    - birth_place
+    - full_name
+    - legal_name
+    - nik
+    - salary
+    type: object
+  handler.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  helper.APIResponse:
+    properties:
+      data: {}
+      error: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /api/limits:
+    post:
+      consumes:
+      - application/json
+      description: Create a new limit or update existing limit for a specific user
+        and tenor
+      parameters:
+      - description: Limit Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateLimitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create or update limit for user
+      tags:
+      - limits
+  /api/limits/{user_id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user limits
+      tags:
+      - limits
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      summary: Login to get JWT token
+      tags:
+      - auth
+  /api/transactions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all transactions
+      tags:
+      - transactions
+    post:
+      consumes:
+      - application/json
+      description: Create a new transaction and deduct user limit
+      parameters:
+      - description: Tenor
+        in: query
+        name: tenor
+        required: true
+        type: integer
+      - description: Transaction Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a transaction
+      tags:
+      - transactions
+  /api/users:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get list of users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with input data
+      parameters:
+      - description: User Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new user
+      tags:
+      - users
 swagger: "2.0"

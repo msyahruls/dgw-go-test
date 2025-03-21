@@ -16,6 +16,17 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+// LoginHandler godoc
+// @Summary Login to get JWT token
+// @Description Authenticate user and return JWT token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "Login Credentials"
+// @Success 200 {object} helper.APIResponse
+// @Failure 400 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /api/login [post]
 func LoginHandler(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
