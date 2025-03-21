@@ -45,7 +45,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		FullName:    req.FullName,
 		LegalName:   req.LegalName,
 		BirthPlace:  req.BirthPlace,
-		BirthDate:   parseDate(req.BirthDate), // helper func (parse time.Time)
+		BirthDate:   helper.ParseDate(req.BirthDate), // helper func (parse time.Time)
 		Salary:      req.Salary,
 		PhotoIDCard: req.PhotoIDCard,
 		PhotoSelfie: req.PhotoSelfie,

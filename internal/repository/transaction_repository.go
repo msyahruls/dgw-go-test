@@ -7,8 +7,8 @@ import (
 )
 
 type TransactionRepository interface {
-	Create(tx *domain.Transaction) error
-	FindAll() ([]domain.Transaction, error)
+	CreateTransaction(tx *domain.Transaction) error
+	FindAllTransaction() ([]domain.Transaction, error)
 	GetDB() *gorm.DB
 }
 
@@ -24,11 +24,11 @@ func (r *transactionRepository) GetDB() *gorm.DB {
 	return r.db
 }
 
-func (r *transactionRepository) Create(tx *domain.Transaction) error {
+func (r *transactionRepository) CreateTransaction(tx *domain.Transaction) error {
 	return r.db.Create(tx).Error
 }
 
-func (r *transactionRepository) FindAll() ([]domain.Transaction, error) {
+func (r *transactionRepository) FindAllTransaction() ([]domain.Transaction, error) {
 	var transactions []domain.Transaction
 	err := r.db.Find(&transactions).Error
 	return transactions, err

@@ -93,3 +93,52 @@ func (h *TransactionHandler) GetTransactions(c *gin.Context) {
 	}
 	helper.Success(c, "Transactions retrieved successfully", transactions)
 }
+
+// GetPaymentSchedules godoc
+// @Summary Get payment schedules for a transaction
+// @Description Retrieve list of payment schedules (installments) by transaction ID
+// @Tags transactions
+// @Produce json
+// @Param id path int true "Transaction ID"
+// @Success 200 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /transactions/{id}/schedules [get]
+func (h *TransactionHandler) GetPaymentSchedules(c *gin.Context) {
+	idParam := c.Param("id")
+	txID, _ := strconv.Atoi(idParam)
+
+	schedules, err := h.TransactionService.GetPaymentSchedules(uint(txID))
+	if err != nil {
+		helper.Error(c, http.StatusInternalServerError, "Failed to retrieve schedules", err.Error())
+		return
+	}
+
+	helper.Success(c, "Payment schedules retrieved successfully", schedules)
+}
+
+// PayInstallment godoc
+// @Summary Pay specific installment
+// @Description Mark an installment schedule as paid
+// @Tags payments
+// @Accept json
+// @Produce json
+// @Param request body dto.PaymentRequest true "Payment Request"
+// @Success 200 {object} helper.APIResponse
+// @Failure 400 {object} helper.APIResponse
+// @Failure 500 {object} helper.APIResponse
+// @Router /payments [post]
+func (h *TransactionHandler) PayInstallment(c *gin.Context) {
+	var req dto.PaymentRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		helper.Error(c, http.StatusBadRequest, "Invalid request", err.Error())
+		return
+	}
+
+	err := h.TransactionService.PayInstallment(req.ScheduleID, helper.ParseDate(req.PaymentDate))
+	if err != nil {
+		helper.Error(c, http.StatusInternalServerError, "Failed to process payment", err.Error())
+		return
+	}
+
+	helper.Success(c, "Installment paid successfully", nil)
+}

@@ -25,6 +25,8 @@ func InitRoutes(router *gin.Engine, db *gorm.DB) {
 
 		protected.POST("/transactions", txHandler.CreateTransaction)
 		protected.GET("/transactions", txHandler.GetTransactions)
+		protected.GET("/transactions/:id/schedules", txHandler.GetPaymentSchedules)
+		protected.POST("/payments", txHandler.PayInstallment)
 
 		protected.POST("/limits", limitHandler.CreateOrUpdateLimit)
 		protected.GET("/limits/:user_id", limitHandler.GetLimits)

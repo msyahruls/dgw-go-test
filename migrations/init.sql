@@ -36,3 +36,15 @@ CREATE TABLE transactions (
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at TIMESTAMP
 );
+
+CREATE TABLE payment_schedules (
+    id SERIAL PRIMARY KEY,
+    transaction_id INT REFERENCES transactions(id) ON UPDATE CASCADE ON DELETE SET NULL,
+    due_date DATE,
+    amount DOUBLE PRECISION,
+    status VARCHAR(10) CHECK (status IN ('UNPAID', 'PAID', 'OVERDUE')),
+    payment_date DATE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP
+);

@@ -9,6 +9,7 @@ A Kredit Management System built with **Golang**, **PostgreSQL**, **Gin**, and *
 - User Management
 - Credit Limit Management per tenor
 - Transaction Recording with Limit Deduction
+- Pay Installment per month
 - JWT Authentication
 - Swagger API Documentation
 - Secure, concurrency-safe transaction handling
@@ -17,7 +18,10 @@ A Kredit Management System built with **Golang**, **PostgreSQL**, **Gin**, and *
 ---
 
 ## 📝 ERD and Architecture
-![alt text](https://raw.githubusercontent.com/msyahruls/kreditplus-go-test/refs/heads/main/docs/kreditplus-test.drawio.png)
+![alt text](https://raw.githubusercontent.com/msyahruls/kreditplus-go-test/refs/heads/main/assets/kreditplus-test.drawio.png)
+
+## 🐘 Database SQL
+https://raw.githubusercontent.com/msyahruls/kreditplus-go-test/refs/heads/main/assets/Localhost-2025-03-21-21_47_35.sql
 
 ## 🏗️ Project Structure
 
