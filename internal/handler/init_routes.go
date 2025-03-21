@@ -22,6 +22,7 @@ func InitRoutes(router *gin.Engine, db *gorm.DB) {
 
 		protected.POST("/users", userHandler.CreateUser)
 		protected.GET("/users", userHandler.GetUsers)
+		protected.GET("/users/:id/limits", limitHandler.GetUserLimits)
 
 		protected.POST("/transactions", txHandler.CreateTransaction)
 		protected.GET("/transactions", txHandler.GetTransactions)
@@ -29,6 +30,6 @@ func InitRoutes(router *gin.Engine, db *gorm.DB) {
 		protected.POST("/payments", txHandler.PayInstallment)
 
 		protected.POST("/limits", limitHandler.CreateOrUpdateLimit)
-		protected.GET("/limits/:user_id", limitHandler.GetLimits)
+		protected.GET("/limits", limitHandler.GetLimits)
 	}
 }

@@ -10,6 +10,7 @@ import (
 type LimitService interface {
 	CreateOrUpdateLimit(limit *domain.Limit) error
 	GetLimits(userID uint) ([]domain.Limit, error)
+	GetUserLimits(userID uint) ([]domain.Limit, error)
 }
 
 type limitService struct {
@@ -27,5 +28,13 @@ func (s *limitService) CreateOrUpdateLimit(limit *domain.Limit) error {
 }
 
 func (s *limitService) GetLimits(userID uint) ([]domain.Limit, error) {
+	if userID != 0 {
+		return s.repo.GetLimitsByUserID(userID)
+	}
+
+	return s.repo.FindAllLimit()
+}
+
+func (s *limitService) GetUserLimits(userID uint) ([]domain.Limit, error) {
 	return s.repo.GetLimitsByUserID(userID)
 }
