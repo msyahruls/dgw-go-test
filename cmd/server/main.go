@@ -16,7 +16,11 @@ import (
 func main() {
 	db := config.ConnectDB()
 	router := config.SetupRouter()
-	router.Use(middleware.ErrorFormatterMiddleware())
+
+	router.Use(middleware.ErrorFormatterMiddleware())  // error formatter middleware
+	router.Use(middleware.SecurityHeadersMiddleware()) // security headers middleware
+	router.Use(middleware.RateLimiterMiddleware())     // rate limiter middleware
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	handler.InitRoutes(router, db)

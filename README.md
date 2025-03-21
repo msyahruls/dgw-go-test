@@ -56,7 +56,7 @@ https://documenter.getpostman.com/view/1475503/2sAYkGKeKE
 
 ## 🔐 Security Implementations (OWASP Top 10)
 
-| OWASP Category                          | Mitigation Implemented                                               |
+| OWASP Category                         | Mitigation Implemented                                               |
 |----------------------------------------|----------------------------------------------------------------------|
 | **Injection (SQL Injection)**          | Using **GORM ORM**, which automatically parameterizes queries.       |
 | **Authentication & Session Management**| JWT-based authentication with expiry, `Bearer` token required.       |
@@ -64,8 +64,8 @@ https://documenter.getpostman.com/view/1475503/2sAYkGKeKE
 | **Security Misconfiguration**          | Sensitive configs in `.env`, debug routes disabled.                  |
 | **Cryptographic Failures**             | JWT uses **HS256**, with secret stored securely.                     |
 | **Input Validation (Insecure Design)** | Strict input validation via Gin binding & validator tags.            |
-<!-- | **Security Headers (Misconfiguration)**| Middleware added for headers like `X-Frame-Options`, `CSP`, etc.      |
-| **Rate Limiting (Auth Failures)**      | Middleware limits request rate to prevent brute force attacks.       | -->
+| **Security Headers (Misconfiguration)**| Middleware added for headers like `X-Frame-Options`, `CSP`, etc.     |
+| **Rate Limiting (Auth Failures)**      | Middleware limits request rate to prevent brute force attacks.       |
 
 ---
 
