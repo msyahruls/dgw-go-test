@@ -40,7 +40,7 @@ func TestCreateTransaction_Success(t *testing.T) {
 	mockLimitRepo.On("UpdateLimit", mock.Anything, mock.Anything).
 		Return(nil)
 
-	mockTxRepo.On("Create", txData).Return(nil)
+	mockTxRepo.On("CreateTransaction", mock.Anything).Return(nil)
 
 	// Service with real DB and mocks
 	svc := &transactionService{
@@ -159,7 +159,7 @@ func TestCreateTransaction_SaveTransactionError(t *testing.T) {
 
 	mockLimitRepo.On("GetLimitForUpdate", mock.Anything, uint(1), 3).Return(limit, nil)
 	mockLimitRepo.On("UpdateLimit", mock.Anything, mock.Anything).Return(nil)
-	mockTxRepo.On("Create", txData).Return(assert.AnError)
+	mockTxRepo.On("CreateTransaction", mock.Anything).Return(assert.AnError)
 
 	// In-memory DB
 	testDB := getTestDB(t)
