@@ -49,8 +49,7 @@ Run the app and access:
 http://localhost:8080/swagger/index.html
 ```
 
-Or access the postman documentation: 
-https://documenter.getpostman.com/view/1475503/2sAYkGKeKE
+Or access the postman documentation: https://documenter.getpostman.com/view/1475503/2sAYkGKeKE
 
 ---
 
@@ -104,6 +103,16 @@ swag init --generalInfo cmd/server/main.go --output docs
 # Run app
 go run cmd/server/main.go
 ```
+
+---
+
+## 🐳 Quick Start (Docker Compose)
+
+```bash
+# Run the entire stack (App + DB)
+docker-compose up --build
+```
+API: http://localhost:8080
 
 ---
 
