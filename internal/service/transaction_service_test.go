@@ -8,8 +8,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 func TestCreateTransaction_Success(t *testing.T) {
@@ -178,13 +176,4 @@ func TestCreateTransaction_SaveTransactionError(t *testing.T) {
 	assert.Equal(t, assert.AnError, err)
 	mockLimitRepo.AssertExpectations(t)
 	mockTxRepo.AssertExpectations(t)
-}
-
-// Helper to get in-memory SQLite DB for tests
-func getTestDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("Failed to connect to test DB: %v", err)
-	}
-	return db
 }
