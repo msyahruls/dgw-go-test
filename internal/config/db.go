@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/domain"
+	"github.com/msyahruls/dgw-go-test/internal/domain"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -24,7 +24,7 @@ func ConnectDB() *gorm.DB {
 	}
 
 	// Run Auto Migration
-	err = db.AutoMigrate(&domain.User{}, &domain.Limit{}, &domain.Transaction{}, &domain.PaymentSchedule{})
+	err = db.AutoMigrate(&domain.User{})
 	if err != nil {
 		log.Fatal("Migration failed: ", err)
 	}

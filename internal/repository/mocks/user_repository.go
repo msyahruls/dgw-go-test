@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	"github.com/msyahruls/kreditplus-go-test/internal/domain"
+	"github.com/msyahruls/dgw-go-test/internal/domain"
 
 	"github.com/stretchr/testify/mock"
 )

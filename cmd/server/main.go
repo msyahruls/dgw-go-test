@@ -3,14 +3,14 @@ package main
 import (
 	"log"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/config"
-	"github.com/msyahruls/kreditplus-go-test/internal/handler"
-	"github.com/msyahruls/kreditplus-go-test/internal/middleware"
+	"github.com/msyahruls/dgw-go-test/internal/config"
+	"github.com/msyahruls/dgw-go-test/internal/handler"
+	"github.com/msyahruls/dgw-go-test/internal/middleware"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/msyahruls/kreditplus-go-test/docs"
+	_ "github.com/msyahruls/dgw-go-test/docs"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/msyahruls/kreditplus-go-test/internal/domain"
-	"github.com/msyahruls/kreditplus-go-test/internal/repository"
+	"github.com/msyahruls/dgw-go-test/internal/domain"
+	"github.com/msyahruls/dgw-go-test/internal/repository"
 
 	"gorm.io/gorm"
 )

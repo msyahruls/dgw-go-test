@@ -3,10 +3,10 @@ package handler
 import (
 	"net/http"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/domain"
-	"github.com/msyahruls/kreditplus-go-test/internal/dto"
-	"github.com/msyahruls/kreditplus-go-test/internal/helper"
-	"github.com/msyahruls/kreditplus-go-test/internal/service"
+	"github.com/msyahruls/dgw-go-test/internal/domain"
+	"github.com/msyahruls/dgw-go-test/internal/dto"
+	"github.com/msyahruls/dgw-go-test/internal/helper"
+	"github.com/msyahruls/dgw-go-test/internal/service"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -41,14 +41,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	user := domain.User{
-		NIK:         req.NIK,
-		FullName:    req.FullName,
-		LegalName:   req.LegalName,
-		BirthPlace:  req.BirthPlace,
-		BirthDate:   helper.ParseDate(req.BirthDate), // helper func (parse time.Time)
-		Salary:      req.Salary,
-		PhotoIDCard: req.PhotoIDCard,
-		PhotoSelfie: req.PhotoSelfie,
+		Name: req.Name,
 	}
 
 	err := h.UserService.CreateUser(&user)

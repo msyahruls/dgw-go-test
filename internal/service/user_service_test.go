@@ -3,8 +3,8 @@ package service
 import (
 	"testing"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/domain"
-	"github.com/msyahruls/kreditplus-go-test/internal/repository/mocks"
+	"github.com/msyahruls/dgw-go-test/internal/domain"
+	"github.com/msyahruls/dgw-go-test/internal/repository/mocks"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -13,13 +13,7 @@ func TestCreateUser_Success(t *testing.T) {
 	mockRepo := new(mocks.UserRepository)
 
 	expectedUser := &domain.User{
-		NIK:         "123456",
-		FullName:    "John Doe",
-		LegalName:   "John Doe",
-		BirthPlace:  "Jakarta",
-		Salary:      5000000,
-		PhotoIDCard: "ktp.jpg",
-		PhotoSelfie: "selfie.jpg",
+		Name: "John Doe",
 	}
 
 	mockRepo.On("Create", expectedUser).Return(nil)
@@ -36,8 +30,8 @@ func TestGetUsers_Success(t *testing.T) {
 	mockRepo := new(mocks.UserRepository)
 
 	expectedUsers := []domain.User{
-		{ID: 1, FullName: "John Doe"},
-		{ID: 2, FullName: "Jane Doe"},
+		{ID: 1, Name: "John Doe"},
+		{ID: 2, Name: "Jane Doe"},
 	}
 
 	mockRepo.On("FindAll").Return(expectedUsers, nil)
@@ -54,7 +48,7 @@ func TestGetUsers_Success(t *testing.T) {
 func TestCreateUser_Failure(t *testing.T) {
 	mockRepo := new(mocks.UserRepository)
 
-	user := &domain.User{NIK: "123456"}
+	user := &domain.User{ID: 1}
 	mockRepo.On("Create", user).Return(assert.AnError)
 
 	svc := &userService{repo: mockRepo}

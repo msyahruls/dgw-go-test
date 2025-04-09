@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/config"
-	"github.com/msyahruls/kreditplus-go-test/internal/helper"
+	"github.com/msyahruls/dgw-go-test/internal/config"
+	"github.com/msyahruls/dgw-go-test/internal/helper"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
