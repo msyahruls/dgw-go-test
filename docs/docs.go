@@ -33,7 +33,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseCategories"
                         }
                     },
                     "500": {
@@ -76,7 +76,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseCategory"
                         }
                     },
                     "400": {
@@ -115,7 +115,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseCategory"
                         }
                     },
                     "404": {
@@ -164,7 +164,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseCategory"
                         }
                     },
                     "400": {
@@ -246,7 +246,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseLogin"
                         }
                     },
                     "400": {
@@ -489,7 +489,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseUser"
                         }
                     },
                     "400": {
@@ -519,7 +519,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseUsers"
                         }
                     },
                     "500": {
@@ -562,7 +562,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseUser"
                         }
                     },
                     "400": {
@@ -601,7 +601,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseUser"
                         }
                     },
                     "404": {
@@ -650,7 +650,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/helper.APIResponse"
+                            "$ref": "#/definitions/helper.APIResponseUser"
                         }
                     },
                     "400": {
@@ -707,6 +707,23 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.CategoryResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.CreateCategoryRequest": {
             "type": "object",
             "required": [
@@ -767,6 +784,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }
@@ -835,11 +860,107 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "helper.APIResponse": {
             "type": "object",
             "properties": {
                 "data": {},
                 "error": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "helper.APIResponseCategories": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.CategoryResponse"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "helper.APIResponseCategory": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/dto.CategoryResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "helper.APIResponseLogin": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/dto.LoginResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "helper.APIResponseUser": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/dto.UserResponse"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "helper.APIResponseUsers": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.UserResponse"
+                    }
+                },
                 "message": {
                     "type": "string"
                 },

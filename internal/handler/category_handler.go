@@ -29,7 +29,7 @@ func NewCategoryHandler(db *gorm.DB) *CategoryHandler {
 // @Produce json
 // @Security BearerAuth
 // @Param request body dto.CreateCategoryRequest true "Category Request Body"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseCategory
 // @Failure 400 {object} helper.APIResponse
 // @Router /api/categories [post]
 func (h *CategoryHandler) CreateCategory(c *gin.Context) {
@@ -53,7 +53,7 @@ func (h *CategoryHandler) CreateCategory(c *gin.Context) {
 // @Tags categories
 // @Produce json
 // @Security BearerAuth
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseCategories
 // @Failure 500 {object} helper.APIResponse
 // @Router /api/categories [get]
 func (h *CategoryHandler) GetCategories(c *gin.Context) {
@@ -71,7 +71,7 @@ func (h *CategoryHandler) GetCategories(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Param id path int true "Category ID"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseCategory
 // @Failure 404 {object} helper.APIResponse
 // @Router /api/categories/{id} [get]
 func (h *CategoryHandler) GetCategoryByID(c *gin.Context) {
@@ -98,7 +98,7 @@ func (h *CategoryHandler) GetCategoryByID(c *gin.Context) {
 // @Security BearerAuth
 // @Param id path int true "Category ID"
 // @Param request body dto.UpdateCategoryRequest true "Update Category Body"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseCategory
 // @Failure 400 {object} helper.APIResponse
 // @Failure 404 {object} helper.APIResponse
 // @Router /api/categories/{id} [put]

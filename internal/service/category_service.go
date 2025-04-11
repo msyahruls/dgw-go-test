@@ -9,10 +9,10 @@ import (
 )
 
 type CategoryService interface {
-	CreateCategory(req dto.CreateCategoryRequest) (*domain.Category, error)
-	GetCategories() ([]domain.Category, error)
-	GetCategoryByID(id uint) (*domain.Category, error)
-	UpdateCategory(id uint, req dto.UpdateCategoryRequest) (*domain.Category, error)
+	CreateCategory(req dto.CreateCategoryRequest) (*dto.CategoryResponse, error)
+	GetCategories() ([]dto.CategoryResponse, error)
+	GetCategoryByID(id uint) (*dto.CategoryResponse, error)
+	UpdateCategory(id uint, req dto.UpdateCategoryRequest) (*dto.CategoryResponse, error)
 	DeleteCategory(id uint) error
 }
 
@@ -26,7 +26,7 @@ func NewCategoryService(db *gorm.DB) CategoryService {
 	}
 }
 
-func (s *categoryService) CreateCategory(req dto.CreateCategoryRequest) (*domain.Category, error) {
+func (s *categoryService) CreateCategory(req dto.CreateCategoryRequest) (*dto.CategoryResponse, error) {
 	category := &domain.Category{
 		Name: req.Name,
 	}
@@ -34,18 +34,31 @@ func (s *categoryService) CreateCategory(req dto.CreateCategoryRequest) (*domain
 	if err := s.repo.Create(category); err != nil {
 		return nil, err
 	}
-	return category, nil
+
+	res := dto.ToCategoryResponse(category)
+	return &res, nil
 }
 
-func (s *categoryService) GetCategories() ([]domain.Category, error) {
-	return s.repo.FindAll()
+func (s *categoryService) GetCategories() ([]dto.CategoryResponse, error) {
+	categories, err := s.repo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return dto.ToCategoryResponses(categories), nil
 }
 
-func (s *categoryService) GetCategoryByID(id uint) (*domain.Category, error) {
-	return s.repo.FindByID(id)
+func (s *categoryService) GetCategoryByID(id uint) (*dto.CategoryResponse, error) {
+	category, err := s.repo.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	res := dto.ToCategoryResponse(category)
+	return &res, nil
 }
 
-func (s *categoryService) UpdateCategory(id uint, req dto.UpdateCategoryRequest) (*domain.Category, error) {
+func (s *categoryService) UpdateCategory(id uint, req dto.UpdateCategoryRequest) (*dto.CategoryResponse, error) {
 	category, err := s.repo.FindByID(id)
 	if err != nil {
 		return nil, err
@@ -57,7 +70,8 @@ func (s *categoryService) UpdateCategory(id uint, req dto.UpdateCategoryRequest)
 		return nil, err
 	}
 
-	return category, nil
+	res := dto.ToCategoryResponse(category)
+	return &res, nil
 }
 
 func (s *categoryService) DeleteCategory(id uint) error {

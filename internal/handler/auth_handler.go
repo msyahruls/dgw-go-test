@@ -29,7 +29,7 @@ func NewAuthHandler(db *gorm.DB) *AuthHandler {
 // @Accept json
 // @Produce json
 // @Param request body dto.RegisterRequest true "Register Request"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseUser
 // @Failure 400 {object} helper.APIResponse
 // @Router /api/register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
@@ -54,7 +54,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param request body dto.LoginRequest true "Login Credentials"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseLogin
 // @Failure 400 {object} helper.APIResponse
 // @Router /api/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {

@@ -29,7 +29,7 @@ func NewUserHandler(db *gorm.DB) *UserHandler {
 // @Produce json
 // @Security BearerAuth
 // @Param request body dto.CreateUserRequest true "User Request Body"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseUser
 // @Failure 400 {object} helper.APIResponse
 // @Router /api/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
@@ -53,7 +53,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Tags users
 // @Produce json
 // @Security BearerAuth
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseUsers
 // @Failure 500 {object} helper.APIResponse
 // @Router /api/users [get]
 func (h *UserHandler) GetUsers(c *gin.Context) {
@@ -71,7 +71,7 @@ func (h *UserHandler) GetUsers(c *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Param id path int true "User ID"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseUser
 // @Failure 404 {object} helper.APIResponse
 // @Router /api/users/{id} [get]
 func (h *UserHandler) GetUserByID(c *gin.Context) {
@@ -98,7 +98,7 @@ func (h *UserHandler) GetUserByID(c *gin.Context) {
 // @Security BearerAuth
 // @Param id path int true "User ID"
 // @Param request body dto.UpdateUserRequest true "Update User Body"
-// @Success 200 {object} helper.APIResponse
+// @Success 200 {object} helper.APIResponseUser
 // @Failure 400 {object} helper.APIResponse
 // @Failure 404 {object} helper.APIResponse
 // @Router /api/users/{id} [put]

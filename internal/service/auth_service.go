@@ -10,7 +10,7 @@ import (
 )
 
 type AuthService interface {
-	Register(dto.RegisterRequest) (*domain.User, error)
+	Register(dto.RegisterRequest) (*dto.UserResponse, error)
 	Login(dto.LoginRequest) (*domain.User, error)
 }
 
@@ -22,7 +22,7 @@ func NewAuthService(db *gorm.DB) AuthService {
 	return &AuthServiceImpl{db: db}
 }
 
-func (s *AuthServiceImpl) Register(req dto.RegisterRequest) (*domain.User, error) {
+func (s *AuthServiceImpl) Register(req dto.RegisterRequest) (*dto.UserResponse, error) {
 	hashedPassword, err := helper.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
@@ -38,7 +38,15 @@ func (s *AuthServiceImpl) Register(req dto.RegisterRequest) (*domain.User, error
 		return nil, err
 	}
 
-	return user, nil
+	res := &dto.UserResponse{
+		ID:        user.ID,
+		Username:  user.Username,
+		Name:      user.Name,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+	}
+
+	return res, nil
 }
 
 func (s *AuthServiceImpl) Login(req dto.LoginRequest) (*domain.User, error) {

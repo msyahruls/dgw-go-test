@@ -10,10 +10,10 @@ import (
 )
 
 type UserService interface {
-	CreateUser(req dto.CreateUserRequest) (*domain.User, error)
-	GetUsers() ([]domain.User, error)
-	GetUserByID(id uint) (*domain.User, error)
-	UpdateUser(id uint, req dto.UpdateUserRequest) (*domain.User, error)
+	CreateUser(req dto.CreateUserRequest) (*dto.UserResponse, error)
+	GetUsers() ([]dto.UserResponse, error)
+	GetUserByID(id uint) (*dto.UserResponse, error)
+	UpdateUser(id uint, req dto.UpdateUserRequest) (*dto.UserResponse, error)
 	DeleteUser(id uint) error
 }
 
@@ -27,7 +27,7 @@ func NewUserService(db *gorm.DB) UserService {
 	}
 }
 
-func (s *userService) CreateUser(req dto.CreateUserRequest) (*domain.User, error) {
+func (s *userService) CreateUser(req dto.CreateUserRequest) (*dto.UserResponse, error) {
 	hashedPassword, err := helper.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
@@ -42,18 +42,35 @@ func (s *userService) CreateUser(req dto.CreateUserRequest) (*domain.User, error
 	if err := s.repo.Create(user); err != nil {
 		return nil, err
 	}
-	return user, nil
+
+	res := dto.ToUserResponse(user)
+
+	return &res, nil
 }
 
-func (s *userService) GetUsers() ([]domain.User, error) {
-	return s.repo.FindAll()
+func (s *userService) GetUsers() ([]dto.UserResponse, error) {
+	users, err := s.repo.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	res := dto.ToUserResponses(users)
+
+	return res, nil
 }
 
-func (s *userService) GetUserByID(id uint) (*domain.User, error) {
-	return s.repo.FindByID(id)
+func (s *userService) GetUserByID(id uint) (*dto.UserResponse, error) {
+	user, err := s.repo.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	res := dto.ToUserResponse(user)
+
+	return &res, nil
 }
 
-func (s *userService) UpdateUser(id uint, req dto.UpdateUserRequest) (*domain.User, error) {
+func (s *userService) UpdateUser(id uint, req dto.UpdateUserRequest) (*dto.UserResponse, error) {
 	user, err := s.repo.FindByID(id)
 	if err != nil {
 		return nil, err
@@ -66,7 +83,9 @@ func (s *userService) UpdateUser(id uint, req dto.UpdateUserRequest) (*domain.Us
 		return nil, err
 	}
 
-	return user, nil
+	res := dto.ToUserResponse(user)
+
+	return &res, nil
 }
 
 func (s *userService) DeleteUser(id uint) error {
