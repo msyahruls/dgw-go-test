@@ -2,27 +2,33 @@ package service
 
 import (
 	"errors"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/msyahruls/dgw-go-test/internal/config"
 	"github.com/msyahruls/dgw-go-test/internal/domain"
 	"github.com/msyahruls/dgw-go-test/internal/dto"
 	"github.com/msyahruls/dgw-go-test/internal/helper"
+	"github.com/msyahruls/dgw-go-test/internal/repository"
 	"gorm.io/gorm"
 )
 
 type AuthService interface {
 	Register(dto.RegisterRequest) (*domain.User, error)
-	Login(dto.LoginRequest) (*domain.User, error)
+	Login(dto.LoginRequest) (*domain.User, string, error)
 }
 
-type AuthServiceImpl struct {
-	db *gorm.DB
+type authService struct {
+	repo repository.UserRepository
 }
 
 func NewAuthService(db *gorm.DB) AuthService {
-	return &AuthServiceImpl{db: db}
+	return &authService{
+		repo: repository.NewUserRepository(db),
+	}
 }
 
-func (s *AuthServiceImpl) Register(req dto.RegisterRequest) (*domain.User, error) {
+func (s *authService) Register(req dto.RegisterRequest) (*domain.User, error) {
 	hashedPassword, err := helper.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
@@ -34,22 +40,34 @@ func (s *AuthServiceImpl) Register(req dto.RegisterRequest) (*domain.User, error
 		Password: hashedPassword,
 	}
 
-	if err := s.db.Create(user).Error; err != nil {
+	if err := s.repo.Create(user); err != nil {
 		return nil, err
 	}
-
 	return user, nil
 }
 
-func (s *AuthServiceImpl) Login(req dto.LoginRequest) (*domain.User, error) {
-	var user domain.User
-	if err := s.db.Where("username = ?", req.Username).First(&user).Error; err != nil {
-		return nil, errors.New("invalid username or password")
+func (s *authService) Login(req dto.LoginRequest) (*domain.User, string, error) {
+	user, err := s.repo.FindByUsername(req.Username)
+	if err != nil {
+		return nil, "", err
 	}
 
 	if !helper.CheckPasswordHash(req.Password, user.Password) {
-		return nil, errors.New("invalid username or password")
+		return nil, "", errors.New("invalid username or password")
 	}
 
-	return &user, nil
+	// Generate JWT token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id":  user.ID,
+		"username": user.Username,
+		"name":     user.Name,
+		"exp":      time.Now().Add(72 * time.Hour).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(config.JWT_SECRET))
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, tokenString, nil
 }

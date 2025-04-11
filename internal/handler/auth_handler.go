@@ -2,11 +2,8 @@ package handler
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/msyahruls/dgw-go-test/internal/config"
 	"github.com/msyahruls/dgw-go-test/internal/dto"
 	"github.com/msyahruls/dgw-go-test/internal/helper"
 	"github.com/msyahruls/dgw-go-test/internal/service"
@@ -64,24 +61,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := h.AuthService.Login(req)
+	_, token, err := h.AuthService.Login(req)
 	if err != nil {
 		helper.Error(c, http.StatusBadRequest, "Invalid credentials", err.Error())
 		return
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id":  user.ID,
-		"username": user.Username,
-		"name":     user.Name,
-		"exp":      time.Now().Add(72 * time.Hour).Unix(),
-	})
-
-	tokenString, err := token.SignedString([]byte(config.JWT_SECRET))
-	if err != nil {
-		helper.Error(c, http.StatusInternalServerError, "Token creation failed", err.Error())
-		return
-	}
-
-	helper.Success(c, "Login successful", gin.H{"token": tokenString})
+	helper.Success(c, "Login successful", gin.H{"token": token})
 }
