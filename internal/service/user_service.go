@@ -59,7 +59,6 @@ func (s *userService) UpdateUser(id uint, req dto.UpdateUserRequest) (*domain.Us
 		return nil, err
 	}
 
-	// Business logic and domain mapping
 	user.Name = req.Name
 	user.Username = req.Username
 

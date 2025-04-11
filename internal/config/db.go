@@ -18,13 +18,15 @@ func ConnectDB() *gorm.DB {
 	}
 
 	dsn := os.Getenv("POSTGRES_DSN")
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		// Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Run Auto Migration
-	err = db.AutoMigrate(&domain.User{})
+	err = db.AutoMigrate(&domain.User{}, &domain.Category{}, &domain.Product{})
 	if err != nil {
 		log.Fatal("Migration failed: ", err)
 	}
