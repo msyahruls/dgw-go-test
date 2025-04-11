@@ -3,23 +3,21 @@ package main
 import (
 	"log"
 
-	"github.com/msyahruls/kreditplus-go-test/internal/config"
-	"github.com/msyahruls/kreditplus-go-test/internal/handler"
-	"github.com/msyahruls/kreditplus-go-test/internal/middleware"
+	"github.com/msyahruls/dgw-go-test/internal/config"
+	"github.com/msyahruls/dgw-go-test/internal/handler"
+	"github.com/msyahruls/dgw-go-test/internal/middleware"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	_ "github.com/msyahruls/kreditplus-go-test/docs"
+	_ "github.com/msyahruls/dgw-go-test/docs"
 )
 
 func main() {
 	db := config.ConnectDB()
 	router := config.SetupRouter()
 
-	router.Use(middleware.ErrorFormatterMiddleware())  // error formatter middleware
-	router.Use(middleware.SecurityHeadersMiddleware()) // security headers middleware
-	router.Use(middleware.RateLimiterMiddleware())     // rate limiter middleware
+	router.Use(middleware.ErrorFormatterMiddleware()) // error formatter middleware
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

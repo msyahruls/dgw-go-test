@@ -1,80 +1,89 @@
 definitions:
-  dto.CreateLimitRequest:
+  dto.CreateCategoryRequest:
     properties:
-      limit_amount:
-        type: number
-      tenor_months:
-        enum:
-        - 1
-        - 2
-        - 3
-        - 4
-        type: integer
-      user_id:
-        type: integer
+      name:
+        type: string
     required:
-    - limit_amount
-    - tenor_months
-    - user_id
+    - name
     type: object
-  dto.CreateTransactionRequest:
+  dto.CreateProductRequest:
     properties:
-      admin_fee:
-        type: number
-      asset_name:
-        type: string
-      contract_number:
-        type: string
-      installment_amount:
-        type: number
-      interest_amount:
-        type: number
-      otr:
-        type: number
-      user_id:
+      category_id:
         type: integer
+      name:
+        type: string
+      price:
+        type: number
     required:
-    - admin_fee
-    - asset_name
-    - contract_number
-    - installment_amount
-    - interest_amount
-    - otr
-    - user_id
+    - category_id
+    - name
+    - price
     type: object
   dto.CreateUserRequest:
     properties:
-      birth_date:
-        description: Date format
+      name:
         type: string
-      birth_place:
+      password:
         type: string
-      full_name:
+      username:
         type: string
-      legal_name:
-        type: string
-      nik:
-        type: string
-      photo_id_card:
-        type: string
-      photo_selfie:
-        type: string
-      salary:
-        type: number
     required:
-    - birth_date
-    - birth_place
-    - full_name
-    - legal_name
-    - nik
-    - salary
+    - name
+    - password
+    - username
     type: object
-  handler.LoginRequest:
+  dto.LoginRequest:
     properties:
       password:
         type: string
       username:
         type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.RegisterRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  dto.UpdateCategoryRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  dto.UpdateProductRequest:
+    properties:
+      category_id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - category_id
+    - name
+    - price
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      name:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - username
     type: object
   helper.APIResponse:
     properties:
@@ -88,19 +97,35 @@ definitions:
 info:
   contact: {}
 paths:
-  /api/limits:
+  /api/categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get list of categories
+      tags:
+      - categories
     post:
       consumes:
       - application/json
-      description: Create a new limit or update existing limit for a specific user
-        and tenor
+      description: Create a new category with input data
       parameters:
-      - description: Limit Request Body
+      - description: Category Request Body
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateLimitRequest'
+          $ref: '#/definitions/dto.CreateCategoryRequest'
       produces:
       - application/json
       responses:
@@ -114,15 +139,15 @@ paths:
             $ref: '#/definitions/helper.APIResponse'
       security:
       - BearerAuth: []
-      summary: Create or update limit for user
+      summary: Create a new category
       tags:
-      - limits
-  /api/limits/{user_id}:
-    get:
+      - categories
+  /api/categories/{id}:
+    delete:
       parameters:
-      - description: User ID
+      - description: Category ID
         in: path
-        name: user_id
+        name: id
         required: true
         type: integer
       produces:
@@ -132,27 +157,84 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/helper.APIResponse'
-        "400":
-          description: Bad Request
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/helper.APIResponse'
       security:
       - BearerAuth: []
-      summary: Get user limits
+      summary: Delete category by ID
       tags:
-      - limits
+      - categories
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get category by ID
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Category Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update category by ID
+      tags:
+      - categories
   /api/login:
     post:
       consumes:
       - application/json
-      description: Authenticate user and return JWT token
       parameters:
       - description: Login Credentials
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/handler.LoginRequest'
+          $ref: '#/definitions/dto.LoginRequest'
       produces:
       - application/json
       responses:
@@ -164,14 +246,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/helper.APIResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/helper.APIResponse'
-      summary: Login to get JWT token
+      summary: Login and get JWT token
       tags:
       - auth
-  /api/transactions:
+  /api/products:
     get:
       produces:
       - application/json
@@ -186,25 +264,20 @@ paths:
             $ref: '#/definitions/helper.APIResponse'
       security:
       - BearerAuth: []
-      summary: Get all transactions
+      summary: Get list of products
       tags:
-      - transactions
+      - products
     post:
       consumes:
       - application/json
-      description: Create a new transaction and deduct user limit
+      description: Create a new product with input data
       parameters:
-      - description: Tenor
-        in: query
-        name: tenor
-        required: true
-        type: integer
-      - description: Transaction Request Body
+      - description: Product Request Body
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateTransactionRequest'
+          $ref: '#/definitions/dto.CreateProductRequest'
       produces:
       - application/json
       responses:
@@ -216,15 +289,118 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/helper.APIResponse'
-        "500":
-          description: Internal Server Error
+      security:
+      - BearerAuth: []
+      summary: Create a new product
+      tags:
+      - products
+  /api/products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
           schema:
             $ref: '#/definitions/helper.APIResponse'
       security:
       - BearerAuth: []
-      summary: Create a transaction
+      summary: Delete product by ID
       tags:
-      - transactions
+      - products
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get product by ID
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update Product Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update product by ID
+      tags:
+      - products
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Register Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      summary: Register a new user
+      tags:
+      - auth
   /api/users:
     get:
       produces:
@@ -268,6 +444,88 @@ paths:
       security:
       - BearerAuth: []
       summary: Create a new user
+      tags:
+      - users
+  /api/users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete user by ID
+      tags:
+      - users
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update User Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/helper.APIResponse'
+      security:
+      - BearerAuth: []
+      summary: Update user by ID
       tags:
       - users
 swagger: "2.0"
