@@ -8,11 +8,13 @@ import (
 )
 
 func InitRoutes(router *gin.Engine, db *gorm.DB) {
+	authHandler := NewAuthHandler(db)
 	userHandler := NewUserHandler(db)
 
 	api := router.Group("/api")
 	{
-		api.POST("/login", LoginHandler)
+		api.POST("/register", authHandler.Register)
+		api.POST("/login", authHandler.Login)
 
 		// Protected Routes
 		protected := api.Group("/")
@@ -20,5 +22,8 @@ func InitRoutes(router *gin.Engine, db *gorm.DB) {
 
 		protected.POST("/users", userHandler.CreateUser)
 		protected.GET("/users", userHandler.GetUsers)
+		protected.GET("/users/:id", userHandler.GetUserByID)
+		protected.PATCH("/users/:id", userHandler.UpdateUser)
+		protected.DELETE("/users/:id", userHandler.DeleteUser)
 	}
 }
