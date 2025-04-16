@@ -41,6 +41,8 @@ http://localhost:8080/swagger/index.html
 
 Or access the postman documentation: https://documenter.getpostman.com/view/1475503/2sB2cYcLXq
 
+---
+
 ## 🛠️ Setup & Run
 
 ```bash
